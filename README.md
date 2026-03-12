@@ -93,6 +93,8 @@ resources/views/
 
 database/migrations/
 └── xxxx_create_products_table.php
+```
 
-![list Create](/public/doc/laravel_s.png)
-![list Create](/public/doc/ai.png)
+## Image
+![list Home](/public/doc/laravel_s.png)
+![list ai](/public/doc/ai.png)
