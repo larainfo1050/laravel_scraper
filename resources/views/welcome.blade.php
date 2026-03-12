@@ -19,148 +19,367 @@
             </style>
         @endif
     </head>
-    <body class="bg-gray-50 dark:bg-gray-900">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                🛍️ E-commerce Product Analytics
-            </h1>
-            <p class="text-gray-600 dark:text-gray-400">
-                AI-Powered Product Analysis with Google Gemini
-            </p>
-        </div>
+<body class="bg-gray-50 dark:bg-gray-900">
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+            🛍️ E-commerce Product Analytics
+        </h1>
+        <p class="text-gray-600 dark:text-gray-400">
+            AI-Powered Product Analysis with Google Gemini
+        </p>
+    </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Total Products</div>
-                <div class="text-3xl font-bold text-blue-600">{{ $stats['total_products'] ?? 0 }}</div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Average Price</div>
-                <div class="text-3xl font-bold text-green-600">${{ $stats['avg_price'] ?? 0 }}</div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Price Range</div>
-                <div class="text-2xl font-bold text-purple-600">
-                    ${{ $stats['min_price'] ?? 0 }} - ${{ $stats['max_price'] ?? 0 }}
-                </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Avg Rating</div>
-                <div class="text-3xl font-bold text-yellow-600">{{ $stats['avg_rating'] ?? 0 }}/5 ⭐</div>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="text-sm text-gray-500 dark:text-gray-400">Total Products</div>
+            <div class="text-3xl font-bold text-blue-600">{{ $stats['total_products'] ?? 0 }}</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="text-sm text-gray-500 dark:text-gray-400">Average Price</div>
+            <div class="text-3xl font-bold text-green-600">${{ $stats['avg_price'] ?? 0 }}</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="text-sm text-gray-500 dark:text-gray-400">Price Range</div>
+            <div class="text-2xl font-bold text-purple-600">
+                ${{ $stats['min_price'] ?? 0 }} - ${{ $stats['max_price'] ?? 0 }}
             </div>
         </div>
-
-        <!-- Action Buttons -->
-        <div class="flex gap-4 mb-8">
-            <button onclick="fetchAIAnalysis()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold">
-                🤖 Get AI Analysis
-            </button>
-            <a href="/products" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold">
-                📊 View All Products (JSON)
-            </a>
-            <a href="/analytics" target="_blank" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold">
-                📈 View Analytics (JSON)
-            </a>
-        </div>
-
-        <!-- AI Analysis Result -->
-        <div id="ai-result" class="hidden bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
-            <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-                🤖 AI Analysis Results
-            </h2>
-            <div id="ai-content" class="prose max-w-none dark:prose-invert"></div>
-        </div>
-
-        <!-- Products Grid -->
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-                Latest Products
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @forelse($products ?? [] as $product)
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-lg transition">
-                        <img src="{{ $product->image }}" alt="{{ $product->title }}" class="w-full h-48 object-contain bg-gray-100 p-4">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-sm mb-2 line-clamp-2 text-gray-900 dark:text-white">
-                                {{ $product->title }}
-                            </h3>
-                            <div class="flex justify-between items-center">
-                                <span class="text-2xl font-bold text-green-600">${{ $product->price }}</span>
-                                <span class="text-yellow-500">⭐ {{ $product->rating }}</span>
-                            </div>
-                            <div class="mt-2">
-                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                    {{ $product->category }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-full text-center py-12 text-gray-500">
-                        <p class="text-xl mb-4">No products found</p>
-                        <a href="/api/scrape" class="bg-blue-600 text-white px-6 py-3 rounded-lg inline-block">
-                            Scrape Products Now
-                        </a>
-                    </div>
-                @endforelse
-            </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="text-sm text-gray-500 dark:text-gray-400">Avg Rating</div>
+            <div class="text-3xl font-bold text-yellow-600">{{ $stats['avg_rating'] ?? 0 }}/5 ⭐</div>
         </div>
     </div>
 
-    <script>
-        async function fetchAIAnalysis() {
-            const resultDiv = document.getElementById('ai-result');
-            const contentDiv = document.getElementById('ai-content');
-            
-            resultDiv.classList.remove('hidden');
-            contentDiv.innerHTML = '<p class="text-gray-500">🔄 Loading AI analysis... This may take 10-15 seconds...</p>';
-            
-            try {
-                const response = await fetch('/ai-analysis');
-                const data = await response.json();
-                
-                if (data.success) {
-                    let html = '<div class="space-y-4">';
-                    
-                    // AI Insights
-                    html += '<div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">';
-                    html += '<h3 class="font-bold mb-2">🤖 AI Insights:</h3>';
-                    html += '<div class="whitespace-pre-wrap">' + data.ai_analysis.ai_insights + '</div>';
-                    html += '</div>';
-                    
-                    // Category Analysis
-                    html += '<div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">';
-                    html += '<h3 class="font-bold mb-2">📊 Category Analysis:</h3>';
-                    data.ai_analysis.category_analysis.forEach(cat => {
-                        html += `<div class="mb-2">
-                            <strong>${cat.category}</strong>: ${cat.total_products} products, 
-                            Avg Price: $${cat.avg_price}, Quality Score: ${cat.quality_score}%
-                        </div>`;
-                    });
-                    html += '</div>';
-                    
-                    // Best Value Products
-                    if (data.ai_analysis.price_recommendations.best_value.length > 0) {
-                        html += '<div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">';
-                        html += '<h3 class="font-bold mb-2">💰 Best Value Products:</h3>';
-                        data.ai_analysis.price_recommendations.best_value.forEach(prod => {
-                            html += `<div>${prod.title} - $${prod.price} (⭐ ${prod.rating})</div>`;
-                        });
-                        html += '</div>';
-                    }
-                    
-                    html += '</div>';
-                    contentDiv.innerHTML = html;
-                } else {
-                    contentDiv.innerHTML = '<p class="text-red-500">Error: ' + data.error + '</p>';
-                }
-            } catch (error) {
-                contentDiv.innerHTML = '<p class="text-red-500">Error loading AI analysis: ' + error.message + '</p>';
-            }
+    <!-- Filters Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">🔍 Filter Products</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Price Min -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Min Price ($)
+                </label>
+                <input type="number" id="minPrice" placeholder="0" 
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    min="0" step="1">
+            </div>
+
+            <!-- Price Max -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Max Price ($)
+                </label>
+                <input type="number" id="maxPrice" placeholder="1000" 
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    min="0" step="1">
+            </div>
+
+            <!-- Category Dropdown -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Category
+                </label>
+                <select id="categoryFilter" 
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="">All Categories</option>
+                    @foreach($stats['categories'] ?? [] as $cat)
+                        <option value="{{ $cat['category'] }}">{{ ucfirst($cat['category']) }} ({{ $cat['count'] }})</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Sort By -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Sort By
+                </label>
+                <select id="sortBy" 
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="default">Default</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="rating_high">Rating: High to Low</option>
+                    <option value="rating_low">Rating: Low to High</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mt-4 flex gap-3">
+            <button onclick="applyFilters()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">
+                🔍 Apply Filters
+            </button>
+            <button onclick="resetFilters()" 
+                class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">
+                🔄 Reset
+            </button>
+        </div>
+    </div>
+
+    <!-- AI Suggestions -->
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-lg shadow p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">💡 AI Suggestions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button onclick="showTopRated()" 
+                class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+                ⭐ Top 5 Rated
+            </button>
+            <button onclick="showBestValue()" 
+                class="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+                💰 Best Value
+            </button>
+            <button onclick="showBudgetFriendly()" 
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+                💵 Budget Friendly
+            </button>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-4 mb-8 flex-wrap">
+        <button onclick="fetchAIAnalysis()" 
+            class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg">
+            🤖 Get Full AI Analysis
+        </button>
+        <a href="/products" target="_blank" 
+            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold inline-block">
+            📊 View All Products (JSON)
+        </a>
+        <a href="/analytics" target="_blank" 
+            class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold inline-block">
+            📈 View Analytics (JSON)
+        </a>
+    </div>
+
+    <!-- AI Analysis Result -->
+    <div id="ai-result" class="hidden bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+            🤖 AI Analysis Results
+        </h2>
+        <div id="ai-content" class="prose max-w-none dark:prose-invert text-gray-700 dark:text-gray-300"></div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Products <span id="product-count" class="text-sm text-gray-500">({{ count($products ?? []) }})</span>
+            </h2>
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+                Showing <span id="showing-count">{{ count($products ?? []) }}</span> products
+            </div>
+        </div>
+        
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @forelse($products ?? [] as $product)
+                <div class="product-card bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-lg transition"
+                     data-price="{{ $product->price }}"
+                     data-category="{{ $product->category }}"
+                     data-rating="{{ $product->rating }}">
+                    <img src="{{ $product->image }}" alt="{{ $product->title }}" 
+                        class="w-full h-48 object-contain bg-gray-100 p-4">
+                    <div class="p-4">
+                        <div class="mb-2">
+                            <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
+                                {{ ucfirst($product->category) }}
+                            </span>
+                        </div>
+                        <h3 class="font-semibold text-sm mb-2 line-clamp-2 text-gray-900 dark:text-white h-10">
+                            {{ $product->title }}
+                        </h3>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-2xl font-bold text-green-600">${{ $product->price }}</span>
+                            <span class="text-yellow-500 font-semibold">⭐ {{ $product->rating }}</span>
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                            {{ $product->rating_count }} reviews
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-12 text-gray-500">
+                    <p class="text-xl mb-4">No products found</p>
+                    <p class="mb-4 text-gray-400">Scrape products first to see them here</p>
+                    <a href="/api/scrape" class="bg-blue-600 text-white px-6 py-3 rounded-lg inline-block hover:bg-blue-700">
+                        🔄 Scrape Products Now
+                    </a>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" class="hidden text-center py-12">
+            <p class="text-xl text-gray-500 dark:text-gray-400 mb-4">😔 No products match your filters</p>
+            <button onclick="resetFilters()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                Reset Filters
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allProducts = [];
+
+    // Load all products on page load
+    window.addEventListener('DOMContentLoaded', function() {
+        allProducts = Array.from(document.querySelectorAll('.product-card')).map(card => ({
+            element: card,
+            price: parseFloat(card.dataset.price),
+            category: card.dataset.category,
+            rating: parseFloat(card.dataset.rating)
+        }));
+    });
+
+    function applyFilters() {
+        const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+        const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+        const category = document.getElementById('categoryFilter').value;
+        const sortBy = document.getElementById('sortBy').value;
+
+        let filtered = allProducts.filter(product => {
+            const priceMatch = product.price >= minPrice && product.price <= maxPrice;
+            const categoryMatch = !category || product.category === category;
+            return priceMatch && categoryMatch;
+        });
+
+        // Sort
+        if (sortBy === 'price_low') {
+            filtered.sort((a, b) => a.price - b.price);
+        } else if (sortBy === 'price_high') {
+            filtered.sort((a, b) => b.price - a.price);
+        } else if (sortBy === 'rating_high') {
+            filtered.sort((a, b) => b.rating - a.rating);
+        } else if (sortBy === 'rating_low') {
+            filtered.sort((a, b) => a.rating - b.rating);
         }
-    </script>
+
+        displayProducts(filtered);
+    }
+
+    function displayProducts(products) {
+        const grid = document.getElementById('products-grid');
+        const noResults = document.getElementById('no-results');
+        const showingCount = document.getElementById('showing-count');
+
+        // Hide all products first
+        allProducts.forEach(p => p.element.style.display = 'none');
+
+        if (products.length === 0) {
+            noResults.classList.remove('hidden');
+            showingCount.textContent = '0';
+        } else {
+            noResults.classList.add('hidden');
+            products.forEach(product => {
+                product.element.style.display = 'block';
+                grid.appendChild(product.element);
+            });
+            showingCount.textContent = products.length;
+        }
+    }
+
+    function resetFilters() {
+        document.getElementById('minPrice').value = '';
+        document.getElementById('maxPrice').value = '';
+        document.getElementById('categoryFilter').value = '';
+        document.getElementById('sortBy').value = 'default';
+        
+        allProducts.forEach(p => p.element.style.display = 'block');
+        document.getElementById('no-results').classList.add('hidden');
+        document.getElementById('showing-count').textContent = allProducts.length;
+    }
+
+    function showTopRated() {
+        const sorted = [...allProducts].sort((a, b) => b.rating - a.rating).slice(0, 5);
+        displayProducts(sorted);
+        window.scrollTo({ top: document.getElementById('products-grid').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function showBestValue() {
+        const avgPrice = allProducts.reduce((sum, p) => sum + p.price, 0) / allProducts.length;
+        const bestValue = allProducts
+            .filter(p => p.rating >= 3.5 && p.price < avgPrice)
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 10);
+        displayProducts(bestValue);
+        window.scrollTo({ top: document.getElementById('products-grid').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function showBudgetFriendly() {
+        const sorted = [...allProducts].sort((a, b) => a.price - b.price).slice(0, 10);
+        displayProducts(sorted);
+        window.scrollTo({ top: document.getElementById('products-grid').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    async function fetchAIAnalysis() {
+        const resultDiv = document.getElementById('ai-result');
+        const contentDiv = document.getElementById('ai-content');
+        
+        resultDiv.classList.remove('hidden');
+        contentDiv.innerHTML = '<div class="flex items-center gap-3"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><p class="text-gray-500">🔄 Analyzing with AI... This may take 10-15 seconds...</p></div>';
+        
+        try {
+            const response = await fetch('/ai-analysis');
+            const data = await response.json();
+            
+            if (data.success) {
+                let html = '<div class="space-y-6">';
+                
+                // AI Insights
+                html += '<div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">';
+                html += '<h3 class="font-bold text-lg mb-3 text-blue-900 dark:text-blue-200">🤖 AI Insights:</h3>';
+                html += '<div class="whitespace-pre-wrap text-gray-800 dark:text-gray-200">' + data.ai_analysis.ai_insights + '</div>';
+                html += '</div>';
+                
+                // Category Analysis
+                html += '<div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800">';
+                html += '<h3 class="font-bold text-lg mb-3 text-purple-900 dark:text-purple-200">📊 Category Analysis:</h3>';
+                html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
+                data.ai_analysis.category_analysis.forEach(cat => {
+                    html += `<div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+                        <h4 class="font-bold text-purple-600 dark:text-purple-400 mb-2">${cat.category}</h4>
+                        <div class="text-sm space-y-1 text-gray-700 dark:text-gray-300">
+                            <div>📦 Products: ${cat.total_products}</div>
+                            <div>💰 Avg Price: $${cat.avg_price}</div>
+                            <div>⭐ Rating: ${cat.avg_rating}/5</div>
+                            <div>📈 Quality: ${cat.quality_score}%</div>
+                        </div>
+                    </div>`;
+                });
+                html += '</div></div>';
+                
+                // Best Value Products
+                if (data.ai_analysis.price_recommendations.best_value.length > 0) {
+                    html += '<div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800">';
+                    html += '<h3 class="font-bold text-lg mb-3 text-green-900 dark:text-green-200">💰 Best Value Products:</h3>';
+                    html += '<ul class="space-y-2">';
+                    data.ai_analysis.price_recommendations.best_value.forEach(prod => {
+                        html += `<li class="flex justify-between items-center bg-white dark:bg-gray-800 p-3 rounded-lg">
+                            <span class="text-gray-800 dark:text-gray-200">${prod.title.substring(0, 50)}...</span>
+                            <span class="flex gap-3 items-center">
+                                <span class="font-bold text-green-600">$${prod.price}</span>
+                                <span class="text-yellow-500">⭐ ${prod.rating}</span>
+                            </span>
+                        </li>`;
+                    });
+                    html += '</ul></div>';
+                }
+                
+                html += '</div>';
+                contentDiv.innerHTML = html;
+                
+                // Scroll to results
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                contentDiv.innerHTML = '<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"><p class="text-red-600 dark:text-red-400">❌ Error: ' + data.error + '</p></div>';
+            }
+        } catch (error) {
+            contentDiv.innerHTML = '<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"><p class="text-red-600 dark:text-red-400">❌ Error: ' + error.message + '</p></div>';
+        }
+    }
+</script>
 </body>
 </html>
