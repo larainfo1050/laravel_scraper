@@ -98,3 +98,4 @@ database/migrations/
 ## Image
 ![list Home](/public/doc/laravel_s.png)
 ![list ai](/public/doc/ai.png)
+![list ai repor](/public/doc/ai_analy.png)
